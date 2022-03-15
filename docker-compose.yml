@@ -1,0 +1,48 @@
+---
+version: '3'
+services:
+
+  normalized:
+    container_name: normalized
+    image: mysql:8.0.28-debian
+    restart: always
+    environment:
+      MYSQL_DATABASE: normalized
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - model-perf
+    ports:
+      - 3306:3306
+    volumes:
+      - ./docker-volumes/normalized:/var/lib/mysql
+
+  optimized:
+    container_name: optimized
+    image: mysql:8.0.28-debian
+    restart: always
+    environment:
+      MYSQL_DATABASE: optimized
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - model-perf
+    ports:
+      - 3307:3306
+    volumes:
+      - ./docker-volumes/optimized:/var/lib/mysql
+
+  adminer:
+    image: adminer:4.8.1
+    container_name: adminer
+    restart: always
+    environment:
+        ADMINER_DESIGN: dracula
+    depends_on:
+        - normalized
+        - optimized
+    ports:
+        - 9000:8080
+    networks:
+      - model-perf
+
+networks:
+  model-perf: {}

@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Auditeur {
+  IdUtilisateur       Int                   @id
+  Utilisateur         Utilisateur           @relation(fields: [IdUtilisateur], references: [IdUtilisateur], onDelete: NoAction, onUpdate: NoAction, map: "auditeur_ibfk_1")
+  AuditeurGroupe      AuditeurGroupe[]
+  ReponseAuditeurExam ReponseAuditeurExam[]
+}
+
+model AuditeurGroupe {
+  IdUtilisateur Int
+  code          String   @db.VarChar(10)
+  Auditeur      Auditeur @relation(fields: [IdUtilisateur], references: [IdUtilisateur], onDelete: NoAction, onUpdate: NoAction, map: "auditeurgroupe_ibfk_1")
+  Groupe        Groupe   @relation(fields: [code], references: [code], onDelete: NoAction, onUpdate: NoAction, map: "auditeurgroupe_ibfk_2")
+
+  @@id([IdUtilisateur, code])
+  @@index([code], map: "code")
+}
+
+model Concepteur {
+  IdUtilisateur Int         @id
+  Utilisateur   Utilisateur @relation(fields: [IdUtilisateur], references: [IdUtilisateur], onDelete: NoAction, onUpdate: NoAction, map: "concepteur_ibfk_1")
+  Examen        Examen[]
+  QCM           QCM[]
+  Question      Question[]
+}
+
+model Examen {
+  IdExamen            Int                   @id @default(autoincrement())
+  dateD               DateTime?             @db.DateTime(0)
+  dateF               DateTime?             @db.DateTime(0)
+  code                String                @db.VarChar(10)
+  IdStatut            Int
+  IdQCM               Int
+  IdUtilisateur       Int
+  QCM                 QCM                   @relation(fields: [IdQCM], references: [IdQCM], onDelete: NoAction, onUpdate: NoAction, map: "examen_ibfk_3")
+  Statut              Statut                @relation(fields: [IdStatut], references: [IdStatut], onDelete: NoAction, onUpdate: NoAction, map: "examen_ibfk_2")
+  Concepteur          Concepteur            @relation(fields: [IdUtilisateur], references: [IdUtilisateur], onDelete: NoAction, onUpdate: NoAction, map: "examen_ibfk_4")
+  Groupe              Groupe                @relation(fields: [code], references: [code], onDelete: NoAction, onUpdate: NoAction, map: "examen_ibfk_1")
+  OptionExamen        OptionExamen[]
+  ReponseAuditeurExam ReponseAuditeurExam[]
+
+  @@index([IdQCM], map: "IdQCM")
+  @@index([IdStatut], map: "IdStatut")
+  @@index([IdUtilisateur], map: "IdUtilisateur")
+  @@index([code], map: "code")
+}
+
+model Groupe {
+  code           String           @id @db.VarChar(10)
+  nom            String?          @db.VarChar(50)
+  description    String?          @db.VarChar(100)
+  AuditeurGroupe AuditeurGroupe[]
+  Examen         Examen[]
+}
+
+model OptionExamen {
+  IdExamen       Int
+  IdOption       Int
+  val            String?        @db.VarChar(50)
+  Examen         Examen         @relation(fields: [IdExamen], references: [IdExamen], onDelete: NoAction, onUpdate: NoAction, map: "optionexamen_ibfk_1")
+  Option_element Option_element @relation(fields: [IdOption], references: [IdOption], onDelete: NoAction, onUpdate: NoAction, map: "optionexamen_ibfk_2")
+
+  @@id([IdExamen, IdOption])
+  @@index([IdOption], map: "IdOption")
+}
+
+model Option_element {
+  IdOption     Int            @id @default(autoincrement())
+  intitule     String?        @db.VarChar(50)
+  OptionExamen OptionExamen[]
+}
+
+model QCM {
+  IdQCM         Int           @id @default(autoincrement())
+  dateCreation  DateTime?     @db.Date
+  IdUtilisateur Int
+  Concepteur    Concepteur    @relation(fields: [IdUtilisateur], references: [IdUtilisateur], onDelete: NoAction, onUpdate: NoAction, map: "qcm_ibfk_1")
+  Examen        Examen[]
+  QuestionQCM   QuestionQCM[]
+
+  @@index([IdUtilisateur], map: "IdUtilisateur")
+}
+
+model Question {
+  IdQuestion     Int           @id @default(autoincrement())
+  intitule       String?       @db.VarChar(100)
+  description    String?       @db.Text
+  points         Int?
+  IdTypeQuestion Int
+  IdUtilisateur  Int?
+  TypeQuestion   TypeQuestion  @relation(fields: [IdTypeQuestion], references: [IdTypeQuestion], onDelete: NoAction, onUpdate: NoAction, map: "question_ibfk_1")
+  Concepteur     Concepteur?   @relation(fields: [IdUtilisateur], references: [IdUtilisateur], onDelete: NoAction, onUpdate: NoAction, map: "question_ibfk_2")
+  QuestionQCM    QuestionQCM[]
+  QuestionTag    QuestionTag[]
+  Reponse        Reponse[]
+
+  @@index([IdTypeQuestion], map: "IdTypeQuestion")
+  @@index([IdUtilisateur], map: "IdUtilisateur")
+}
+
+model QuestionQCM {
+  IdQuestion Int
+  IdQCM      Int
+  QCM        QCM      @relation(fields: [IdQCM], references: [IdQCM], onDelete: NoAction, onUpdate: NoAction, map: "questionqcm_ibfk_2")
+  Question   Question @relation(fields: [IdQuestion], references: [IdQuestion], onDelete: NoAction, onUpdate: NoAction, map: "questionqcm_ibfk_1")
+
+  @@id([IdQuestion, IdQCM])
+  @@index([IdQCM], map: "IdQCM")
+}
+
+model QuestionTag {
+  IdQuestion Int
+  IdTag      Int
+  Question   Question @relation(fields: [IdQuestion], references: [IdQuestion], onDelete: NoAction, onUpdate: NoAction, map: "questiontag_ibfk_1")
+  Tag        Tag      @relation(fields: [IdTag], references: [IdTag], onDelete: NoAction, onUpdate: NoAction, map: "questiontag_ibfk_2")
+
+  @@id([IdQuestion, IdTag])
+  @@index([IdTag], map: "IdTag")
+}
+
+model Reponse {
+  IdQuestion          Int
+  NumReponse          Int
+  intitule            String?               @db.VarChar(100)
+  exactitude          Int?
+  Question            Question              @relation(fields: [IdQuestion], references: [IdQuestion], onDelete: NoAction, onUpdate: NoAction, map: "reponse_ibfk_1")
+  ReponseAuditeurExam ReponseAuditeurExam[]
+
+  @@id([IdQuestion, NumReponse])
+}
+
+model ReponseAuditeurExam {
+  IdUtilisateur Int
+  IdQuestion    Int
+  NumReponse    Int
+  IdExamen      Int
+  valeur        String?  @db.VarChar(50)
+  Examen        Examen   @relation(fields: [IdExamen], references: [IdExamen], onDelete: NoAction, onUpdate: NoAction, map: "reponseauditeurexam_ibfk_3")
+  Reponse       Reponse  @relation(fields: [IdQuestion, NumReponse], references: [IdQuestion, NumReponse], onDelete: NoAction, onUpdate: NoAction, map: "reponseauditeurexam_ibfk_2")
+  Auditeur      Auditeur @relation(fields: [IdUtilisateur], references: [IdUtilisateur], onDelete: NoAction, onUpdate: NoAction, map: "reponseauditeurexam_ibfk_1")
+
+  @@id([IdUtilisateur, IdQuestion, NumReponse, IdExamen])
+  @@index([IdExamen], map: "IdExamen")
+  @@index([IdQuestion, NumReponse], map: "IdQuestion")
+}
+
+model Statut {
+  IdStatut Int      @id @default(autoincrement())
+  libelle  String?  @db.VarChar(50)
+  Examen   Examen[]
+}
+
+model Tag {
+  IdTag       Int           @id @default(autoincrement())
+  couleur     String?       @db.VarChar(50)
+  intitule    String?       @db.VarChar(50)
+  QuestionTag QuestionTag[]
+}
+
+model TypeQuestion {
+  IdTypeQuestion Int        @id @default(autoincrement())
+  intitule       String?    @db.VarChar(50)
+  Question       Question[]
+}
+
+model Utilisateur {
+  IdUtilisateur Int         @id @default(autoincrement())
+  nom           String?     @db.VarChar(50)
+  prenom        String?     @db.VarChar(50)
+  email         String?     @db.VarChar(255)
+  password      String?     @db.VarChar(50)
+  Auditeur      Auditeur?
+  Concepteur    Concepteur?
+}
