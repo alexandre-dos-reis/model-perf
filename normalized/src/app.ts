@@ -14,8 +14,6 @@ const prisma = new PrismaClient()
 
 async function main() {
 
-  // clear("mysql")
-
   // createUsers()
   // createConcepteurs()
   // createQuestions()
@@ -25,8 +23,7 @@ async function main() {
   // createAuditeursAndGroupes()
   // createReponseAuditeurExams()
   // createOptions()
-
-  // creer les requêtes et les comparer...
+  
 
   
 

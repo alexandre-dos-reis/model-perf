@@ -13,6 +13,4 @@ export default async function createUTypes() {
           {libelle: "Auditeur"}
       ]
   })
-
-
 }

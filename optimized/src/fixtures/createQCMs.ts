@@ -5,7 +5,6 @@ const prisma = new PrismaClient()
 
 export default async function creatQCMs() {
 
-
     const concepteurs: Utilisateur[] = await prisma.utilisateur.findMany({
         where: {
             TypeU: {
@@ -14,23 +13,21 @@ export default async function creatQCMs() {
         }
     })
 
-    
+    const QCMs: QCM[] = []
 
-    // const QCMs: QCM[] = []
-
-    // concepteurs.map(c => {
+    concepteurs.map(c => {
   
-    //   const qcm: QCM = {
-    //     IdUtilisateur: c.IdUtilisateur,
-    //     dateCreation: faker.date.past(10)
-    //   }
+      const qcm: QCM = {
+        IdUtilisateur: c.IdUtilisateur,
+        dateCreation: faker.date.past(10)
+      }
   
-    //   QCMs.push(qcm)
-    // })
+      QCMs.push(qcm)
+    })
   
-    // await prisma.qCM.createMany({
-    //   data: QCMs
-    // })
+    await prisma.qCM.createMany({
+      data: QCMs
+    })
 
 
 }

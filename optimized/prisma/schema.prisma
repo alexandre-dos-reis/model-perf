@@ -21,7 +21,7 @@ model Examen {
   IdExamen            Int                   @id @default(autoincrement())
   dateD               DateTime?             @db.DateTime(0)
   dateF               DateTime?             @db.DateTime(0)
-  optionJSON          String?               @db.VarChar(50)
+  optionJSON          String?               @db.VarChar(255)
   statut              String?               @db.VarChar(50)
   code                String                @db.VarChar(10)
   IdQCM               Int
