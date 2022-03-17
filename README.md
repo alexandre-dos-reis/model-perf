@@ -2,8 +2,8 @@
 
 Ce projet a pour but de tester les performances entre 2 modèles de données : 
 
-    - 1 modèle normalisé appelé `normalized`.
-    - 1 modèle optimisé appelé `optimized`.
+- 1 modèle normalisé appelé `normalized`.
+- 1 modèle optimisé appelé `optimized`.
 
 La stack technique est la suivante :
     - Langage coté serveur : NodeJS avec typescript
