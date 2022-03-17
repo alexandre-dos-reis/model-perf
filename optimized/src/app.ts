@@ -9,6 +9,7 @@ import createAuditeurGroupe from './fixtures/createAuditeurGroupe'
 import createQuestionsQCM from './fixtures/createQuestionQCM'
 import createReponses from './fixtures/createReponses'
 import createReponseAuditeurExams from './fixtures/createReponsesAuditeursExam'
+import bonneReponses from './measures/bonneReponses'
 
 const prisma = new PrismaClient()
 
@@ -25,6 +26,8 @@ async function main() {
   // createReponses()
   // createReponseAuditeurExams()
 
+
+  bonneReponses()
 
   
 }

@@ -22,7 +22,7 @@ L'intérêt de cet ORM est qu'il peut effectuer une **instrospection**, il peut 
 - Se rendre à la racine du projet et démarrer l'infrastructure avec `docker-compose up -d`.
 - Se rendre dans les dossiers `normalized` et `optimized`, lancer la commande `pnpm i` pour installer les dépendances
 - Puis `pnpm exec prisma generate` pour générer l'api des objets de l'ORM.
-- Lancer la commande `pnpm dev` pour lancer l'environnement de production, cette commande effectue les commandes suivantes simultanément à l'aide du paquet [concurrently](https://www.npmjs.com/package/concurrently):
+- Lancer la commande `pnpm dev` pour lancer l'environnement de dev, cette commande effectue les commandes suivantes simultanément à l'aide de [concurrently](https://www.npmjs.com/package/concurrently):
   - Lance la compilation automatique avec `tsc -w` des fichiers typescript contenu dans `src` vers un fichier javascript situé dans le dossier `dist`.
   - Lance la commande `nodemon` qui éxecute le fichier `dist/app.js` à chaque changement de celui-ci.
 
@@ -44,3 +44,29 @@ L'intérêt de cet ORM est qu'il peut effectuer une **instrospection**, il peut 
 
 ### Générer les objets liés à la BDD
 - Taper la commande `pnpm exec prisma generate` pour générer les objets d'ORM.
+
+## Test de performances
+
+Il s'agit de comparer les temps de réponses pour une même requête sur les 2 bases de données.
+
+Pour chaque bdd, les test individuels sont placés dans les dossiers: `[normalized|optimized]/src/measures/nomDuTest.ts`
+
+Pour effectuer la mesure, on utilise une méthode native à javascript permettant de lancer un timer, par exemple :
+
+```js
+console.time("Ma mesure")
+
+// Requête...
+
+console.timeEnd("Ma mesure")
+// 5.607s
+// 5.584s
+// 5.467s
+
+```
+
+## Résultats des comparatifs
+
+- Toutes les questions posées qui ont pour réponses exacte 60 points.
+  - Normalized: `5.584s`
+  - Optimized: `930.396ms`

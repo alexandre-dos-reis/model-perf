@@ -9,6 +9,7 @@ import createAuditeursAndGroupes from './fixtures/createAuditeursAndGroupes'
 import { clear } from './fixtures/prismaUtils'
 import createReponseAuditeurExams from './fixtures/createReponseAuditeurExams'
 import createOptions from './fixtures/createOptions'
+import bonneReponses from './measures/bonneReponses'
 
 const prisma = new PrismaClient()
 
@@ -23,6 +24,8 @@ async function main() {
   // createAuditeursAndGroupes()
   // createReponseAuditeurExams()
   // createOptions()
+
+  bonneReponses()
   
 
   
