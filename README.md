@@ -1,6 +1,7 @@
 # Test de performance entre 2 modèles
 
-Ce projet a pour but de tester les performances entre 2 modèles de données :
+Ce projet a pour but de tester les performances entre 2 modèles de données : 
+
     - 1 modèle normalisé appelé `normalized`.
     - 1 modèle optimisé appelé `optimized`.
 
