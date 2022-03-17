@@ -52,6 +52,8 @@ Il s'agit de comparer les temps de réponses pour une même requête sur les 2 b
 
 Pour chaque bdd, les test individuels sont placés dans les dossiers: `[normalized|optimized]/src/measures/nomDuTest.ts`
 
+### Exemple de mesure
+
 Pour effectuer la mesure, on utilise une méthode native à javascript permettant de lancer un timer, par exemple :
 
 ```js
@@ -66,7 +68,7 @@ console.timeEnd("Ma mesure")
 
 ```
 
-## Résultats des comparatifs
+### Résultats des comparatifs
 
 - Toutes les questions posées qui ont pour réponses exacte 60 points.
   - Normalized: `5.584s`
