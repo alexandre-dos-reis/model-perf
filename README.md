@@ -6,8 +6,8 @@ Ce projet a pour but de tester les performances entre 2 modèles de données :
 - 1 modèle optimisé appelé `optimized`.
 
 La stack technique est la suivante :
-    - Langage coté serveur : NodeJS avec typescript
-    - ORM : [Prisma](https://www.prisma.io/)
+- Langage coté serveur : NodeJS avec typescript
+- ORM : [Prisma](https://www.prisma.io/)
 
 L'intérêt de cet ORM est qu'il peut effectuer une **instrospection**, il peut lire une base de données et en tirer un schéma de model compréhensible pour lui, ce qui permettra de manipuler la BDD plus facilement.
 
